@@ -1,4 +1,4 @@
-FROM clux/muslrust:nightly
+FROM rustlang/rust:nightly
 
 WORKDIR /usr/src/myapp
 

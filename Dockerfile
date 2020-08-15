@@ -2,7 +2,7 @@
 FROM clux/muslrust:nightly as build
 
 # create a new empty shell project
-RUN USER=root cargo new --bin my_project
+RUN USER=root cargo build --release my_project
 WORKDIR /my_project
 
 # copy over your manifests

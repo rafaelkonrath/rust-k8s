@@ -1,14 +1,16 @@
 FROM rustlang/rust:nightly as builder
 
-WORKDIR /usr/src/
-RUN rustup target add x86_64-unknown-linux-musl
+WORKDIR /wegift
+##RUN rustup target add x86_64-unknown-linux-musl
 
-RUN USER=root cargo new wegift
-WORKDIR /usr/src/wegift
+##RUN USER=root cargo build --release wegift
+##WORKDIR /usr/src/wegift
 # Avoid having to install/build all dependencies by copying
 # the Cargo files and making a dummy src/main.rs
-COPY Cargo.toml Cargo.lock ./
-RUN cargo build --release
+COPY ./Cargo.toml ./Cargo.toml
+COPY ./diesel.toml ./diesel.toml
+COPY ./Rocket.toml ./Rocket.toml
+##RUN cargo build --release
 
 # copy your source tree
 COPY ./src ./src
@@ -30,7 +32,7 @@ RUN strip target/release/wegift
 
 # Start building the final image
 FROM gcr.io/distroless/cc-debian10
-WORKDIR /home/rust/
-COPY --from=builder /usr/src/wegift/target/release/wegift .
+WORKDIR /wegift
+COPY --from=builder /wegift/target/release/wegift .
 USER 1000
 ENTRYPOINT ["./wegift"]

@@ -1,4 +1,4 @@
-FROM rustlang/rust:nightly as build
+FROM rustlang/rust:nightly as builder
 
 WORKDIR /home/rust/
 

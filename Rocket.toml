@@ -1,0 +1,10 @@
+[development]
+port = 8080
+log = "debug"
+
+[development.databases]
+postgres = { url = "postgres://wegift:wegift@localhost/wegift" }
+
+[prod]
+port = 3000
+log = "normal"

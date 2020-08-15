@@ -1,4 +1,4 @@
-FROM ekidd/rust-musl-builder as builder
+FROM rustlang/rust:nightly as build
 
 WORKDIR /home/rust/
 

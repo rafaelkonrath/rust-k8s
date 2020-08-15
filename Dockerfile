@@ -10,7 +10,7 @@ COPY Cargo.lock .
 # copy your source tree
 COPY ./src ./src
 
-RUN cargo test
+##RUN cargo test
 RUN cargo build --release
 
 # We need to touch our real main.rs file or else docker will use
@@ -25,7 +25,7 @@ RUN cargo build --release
 RUN strip target/release/wegift
 
 # Start building the final image
-FROM scratch
+FROM alpine:latest
 WORKDIR /home/rust/
 COPY --from=builder /home/rust/target/release/wegift .
 ENTRYPOINT ["./wegift"]

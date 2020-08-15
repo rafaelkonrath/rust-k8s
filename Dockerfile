@@ -1,5 +1,9 @@
 FROM rustlang/rust:nightly as builder
 
+RUN apt-get update
+RUN apt-get install musl-tools -y
+RUN rustup target add x86_64-unknown-linux-musl
+
 WORKDIR /wegift
 ##RUN rustup target add x86_64-unknown-linux-musl
 
@@ -17,7 +21,7 @@ COPY ./src ./src
 
 ##RUN cargo test
 ##RUN cargo build --release
-RUN cargo install --path .
+RUN RUSTFLAGS=-Clinker=musl-gcc cargo install -—release —target=x86_64-unknown-linux-musl
 
 # We need to touch our real main.rs file or else docker will use
 # the cached one.
@@ -31,7 +35,7 @@ RUN cargo install --path .
 RUN strip target/release/wegift
 
 # Start building the final image
-FROM gcr.io/distroless/cc-debian10
+FROM alpine:latest
 WORKDIR /wegift
 COPY --from=builder /wegift/target/release/wegift .
 USER 1000

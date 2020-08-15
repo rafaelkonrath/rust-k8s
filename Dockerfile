@@ -28,4 +28,4 @@ RUN strip target/release/wegift
 FROM alpine:latest
 WORKDIR /home/rust/
 COPY --from=builder /home/rust/target/release/wegift .
-ENTRYPOINT ["./wegift"]
+ENTRYPOINT ["/home/rust/wegift"]

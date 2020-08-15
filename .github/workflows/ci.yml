@@ -12,25 +12,44 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      #- uses: actions/checkout@v2
-      #- uses: actions-rs/toolchain@v1
-      #  with:
-      #    toolchain: nightly
-      #- uses: actions-rs/cargo@v1
-      #  with:
-      #    toolchain: nightly
-      #    command: build
-      #    args: --release --all-features
+      - uses: actions/checkout@v2
+      - name: docker login
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+      - name: docker build wegift app
+        run: |
+          DOCKER_BUILDKIT=1 docker build . -t wegift -f Cargo.toml
+      - name: docker push
+        run: |
+          docker push konrath/wegift:latest
 
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Build and push Docker images
-        uses: docker/build-push-action@v1
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: konrath/wegift
-          tags: latest
+##jobs:
+##  build:
+##    runs-on: ubuntu-latest
+##
+##    steps:
+##      #- uses: actions/checkout@v2
+##      #- uses: actions-rs/toolchain@v1
+##      #  with:
+##      #    toolchain: nightly
+##      #- uses: actions-rs/cargo@v1
+##      #  with:
+##      #    toolchain: nightly
+##      #    command: build
+##      #    args: --release --all-features
+##
+##      - name: Checkout code
+##        uses: actions/checkout@v2
+##
+##      - name: Build and push Docker images
+##        uses: docker/build-push-action@v1
+##        with:
+##          username: ${{ secrets.DOCKER_USERNAME }}
+##          password: ${{ secrets.DOCKER_PASSWORD }}
+##          repository: konrath/wegift
+##          tags: latest
+##

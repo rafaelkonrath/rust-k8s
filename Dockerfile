@@ -7,6 +7,9 @@ WORKDIR /home/rust/
 COPY Cargo.toml .
 COPY Cargo.lock .
 
+# copy your source tree
+COPY ./src ./src
+
 RUN cargo test
 RUN cargo build --release
 

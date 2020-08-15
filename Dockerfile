@@ -1,17 +1,21 @@
-FROM rustlang/rust:nightly as builder
+FROM rust:1.40.0 as builder
 
-WORKDIR /home/rust/
+WORKDIR /usr/src/
+RUN rustup target add x86_64-unknown-linux-musl
 
+RUN USER=root cargo new wegift
+WORKDIR /usr/src/wegift
 # Avoid having to install/build all dependencies by copying
 # the Cargo files and making a dummy src/main.rs
-COPY Cargo.toml .
-COPY Cargo.lock .
+COPY Cargo.toml Cargo.lock ./
+RUN cargo build --release
 
 # copy your source tree
 COPY ./src ./src
 
 ##RUN cargo test
-RUN cargo build --release
+##RUN cargo build --release
+RUN cargo install --target x86_64-unknown-linux-musl --path .
 
 # We need to touch our real main.rs file or else docker will use
 # the cached one.
@@ -25,7 +29,8 @@ RUN cargo build --release
 RUN strip target/release/wegift
 
 # Start building the final image
-FROM clux/muslrust:nightly
+FROM scratch
 WORKDIR /home/rust/
 COPY --from=builder /home/rust/target/release/wegift .
+USER 1000
 ENTRYPOINT ["./wegift"]

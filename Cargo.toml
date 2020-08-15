@@ -16,7 +16,6 @@ dotenv = "0.15"
 
 [[bin]]
 name = "wegift"
-path = "src/main.rs"
 
 [dependencies.rocket_contrib]
 version = "0.4"

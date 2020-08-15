@@ -25,7 +25,7 @@ RUN cargo build --release
 RUN strip target/release/wegift
 
 # Start building the final image
-FROM alpine:latest
+FROM clux/muslrust:nightly
 WORKDIR /home/rust/
 COPY --from=builder /home/rust/target/release/wegift .
-ENTRYPOINT ["/home/rust/wegift"]
+ENTRYPOINT ["./wegift"]

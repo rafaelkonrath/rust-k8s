@@ -17,7 +17,7 @@ COPY ./src ./src
 
 ##RUN cargo test
 ##RUN cargo build --release
-RUN cargo install --target x86_64-unknown-linux-musl --path .
+RUN cargo install --path .
 
 # We need to touch our real main.rs file or else docker will use
 # the cached one.

@@ -17,7 +17,7 @@ COPY ./src ./src
 
 ##RUN cargo test
 ##RUN cargo build --release
-RUN RUSTFLAGS=-Clinker=musl-gcc cargo install --release target=x86_64-unknown-linux-musl
+RUN cargo install --path .
 
 
 # We need to touch our real main.rs file or else docker will use

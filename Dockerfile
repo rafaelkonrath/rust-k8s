@@ -31,6 +31,6 @@ RUN strip target/release/wegift
 # Start building the final image
 FROM scratch
 WORKDIR /home/rust/
-COPY --from=builder /home/rust/target/release/wegift .
+COPY --from=builder /usr/src/wegift/target/release/wegift .
 USER 1000
 ENTRYPOINT ["./wegift"]

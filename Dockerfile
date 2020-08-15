@@ -1,4 +1,4 @@
-FROM clux/muslrust
+FROM rustlang/rust:nightly as builder
 
 WORKDIR /wegift
 ##RUN rustup target add x86_64-unknown-linux-musl

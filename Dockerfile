@@ -1,31 +1,28 @@
-# select build image
-FROM rustlang/rust:nightly as build
+FROM ekidd/rust-musl-builder as builder
 
-# create a new empty shell project
-RUN USER=root cargo build --release my_project
-WORKDIR /my_project
+WORKDIR /home/rust/
 
-# copy over your manifests
-COPY ./Cargo.lock ./Cargo.lock
-COPY ./Cargo.toml ./Cargo.toml
+# Avoid having to install/build all dependencies by copying
+# the Cargo files and making a dummy src/main.rs
+COPY Cargo.toml .
+COPY Cargo.lock .
 
-# this build step will cache your dependencies
-RUN cargo build --release
-RUN rm src/*.rs
-
-# copy your source tree
-COPY ./src ./src
-
-# build for release
-RUN rm ./target/release/deps/my_project*
+RUN cargo test
 RUN cargo build --release
 
+# We need to touch our real main.rs file or else docker will use
+# the cached one.
+COPY . .
+RUN sudo touch src/main.rs
 
-# our final base
-FROM clux/muslrust:nightly
+RUN cargo test
+RUN cargo build --release
 
-# copy the build artifact from the build stage
-COPY --from=build /my_project/target/release/my_project .
+# Size optimization
+RUN strip target/x86_64-unknown-linux-musl/release/wegift
 
-# set the startup command to run your binary
-CMD ["./my_project"]
+# Start building the final image
+FROM scratch
+WORKDIR /home/rust/
+COPY --from=builder /home/rust/target/x86_64-unknown-linux-musl/release/wegift .
+ENTRYPOINT ["./wegift"]

@@ -29,7 +29,7 @@ RUN cargo install --target x86_64-unknown-linux-musl --path .
 RUN strip target/release/wegift
 
 # Start building the final image
-FROM scratch
+FROM gcr.io/distroless/cc-debian10
 WORKDIR /home/rust/
 COPY --from=builder /usr/src/wegift/target/release/wegift .
 USER 1000

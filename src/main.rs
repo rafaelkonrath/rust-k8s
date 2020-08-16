@@ -36,16 +36,16 @@ struct NewGiftCard {
 }
 
 #[get("/")]
-fn get_todos(conn: DbConn) -> Json<Vec<GiftCard>> {
-    let todos = giftcards::table
+fn get_gift(conn: DbConn) -> Json<Vec<GiftCard>> {
+    let gifts = giftcards::table
         .order(giftcards::columns::id.desc())
         .load::<GiftCard>(&*conn)
         .unwrap();
-    Json(todos)
+    Json(gifts)
 }
 
 #[post("/", data = "<gift_card>")]
-fn create_todo(conn: DbConn, gift_card: Json<NewGiftCard>) -> Json<GiftCard> {
+fn create_gift(conn: DbConn, gift_card: Json<NewGiftCard>) -> Json<GiftCard> {
     let result = diesel::insert_into(giftcards::table)
         .values(&*gift_card)
         .get_result(&*conn)
@@ -54,7 +54,7 @@ fn create_todo(conn: DbConn, gift_card: Json<NewGiftCard>) -> Json<GiftCard> {
 }
 
 #[put("/<id>")]
-fn check_todo(conn: DbConn, id: i32) -> Json<GiftCard> {
+fn check_gift(conn: DbConn, id: i32) -> Json<GiftCard> {
     let target = giftcards::table.filter(giftcards::columns::id.eq(id));
     let result = diesel::update(target)
         .set(giftcards::columns::active.eq(false))
@@ -78,6 +78,6 @@ fn main() {
     rocket::ignite()
         .attach(DbConn::fairing())
         .mount("/", routes![hello, hello_name])
-        .mount("/todos", routes![get_todos, create_todo, check_todo])
+        .mount("/gifts", routes![get_gift, create_gift, check_gift])
         .launch();
 }

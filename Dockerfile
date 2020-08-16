@@ -25,6 +25,6 @@ FROM clux/muslrust:nightly
 
 # copy the build artifact from the build stage
 COPY --from=builder /wegift/target/release/wegift .
-
+USER 1000
 # set the startup command to run your binary
 CMD ["./wegift"]

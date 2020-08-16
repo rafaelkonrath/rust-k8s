@@ -5,6 +5,9 @@ log = "debug"
 [development.databases]
 postgres = { url = "postgres://wegift:wegift@localhost/wegift" }
 
-[prod]
+[production]
 port = 3000
 log = "normal"
+
+[production.databases]
+postgres = { url = "postgres://wegift:wegift@postgres/wegift" }

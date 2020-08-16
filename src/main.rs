@@ -77,7 +77,7 @@ fn hello_name(name: String) -> String {
 fn main() {
     rocket::ignite()
         .attach(DbConn::fairing())
-        .mount("/hello", routes![hello, hello_name])
+        .mount("/", routes![hello, hello_name])
         .mount("/todos", routes![get_todos, create_todo, check_todo])
         .launch();
 }

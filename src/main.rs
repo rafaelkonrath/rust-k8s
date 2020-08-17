@@ -70,6 +70,11 @@ fn hello() -> &'static str {
     "Hello, World!"
 }
 
+#[get("/again")]
+fn hello_again() -> &'static str {
+    "Hello, World!"
+}
+
 #[get("/<name>")]
 fn hello_name(name: String) -> String {
     format!("Hello, {}!", name)
@@ -80,6 +85,7 @@ fn main() {
     rocket::ignite()
         .attach(DbConn::fairing())
         .mount("/", routes![hello, hello_name])
+        .mount("/again", routes![hello_again])
         .mount("/gifts", routes![get_gift, create_gift, check_gift])
         .attach(prometheus.clone())
         .mount("/metrics", prometheus)

@@ -11,6 +11,7 @@ use diesel::{Insertable, Queryable};
 use rocket::{self, get, post, put, routes};
 use rocket_contrib::databases::{database, diesel::PgConnection};
 use rocket_contrib::json::Json;
+use rocket_prometheus::PrometheusMetrics;
 use serde::{Deserialize, Serialize};
 
 #[database("postgres")]
@@ -75,9 +76,12 @@ fn hello_name(name: String) -> String {
 }
 
 fn main() {
+    let prometheus = PrometheusMetrics::new();
     rocket::ignite()
         .attach(DbConn::fairing())
         .mount("/", routes![hello, hello_name])
         .mount("/gifts", routes![get_gift, create_gift, check_gift])
+        .attach(prometheus.clone())
+        .mount("/metrics", prometheus)
         .launch();
 }

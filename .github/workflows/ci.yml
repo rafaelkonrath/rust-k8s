@@ -1,29 +1,29 @@
-name: Rust
+##name: Rust
 
-on:
-  push:
-    branches: [master]
-  pull_request:
-    branches: [master]
+##on:
+##  push:
+##    branches: [master]
+##  pull_request:
+##    branches: [master]
 
-env:
-  CARGO_TERM_COLOR: always
+##env:
+##  CARGO_TERM_COLOR: always
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: docker build wegift app
-        run: |
-          docker build . -t wegift
-      - name: Build and push Docker images
-        uses: docker/build-push-action@v1
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: konrath/wegift
-          tags: latest
+##jobs:
+##  build:
+##    runs-on: ubuntu-latest
+##    steps:
+##      - uses: actions/checkout@v2
+##      - name: docker build wegift app
+##        run: |
+##          docker build . -t wegift
+##      - name: Build and push Docker images
+##        uses: docker/build-push-action@v1
+##        with:
+##          username: ${{ secrets.DOCKER_USERNAME }}
+##          password: ${{ secrets.DOCKER_PASSWORD }}
+##          repository: konrath/wegift
+##          tags: latest
 ##jobs:
 ##  build:
 ##    runs-on: ubuntu-latest
